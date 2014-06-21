@@ -6,6 +6,7 @@ describe 'jira' do
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
   let(:server_xml) { '/opt/atlassian-jira-6.2-standalone/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-jira-6.2-standalone/bin/setenv.sh' }
+  let(:user_sh) { '/opt/atlassian-jira-6.2-standalone/bin/user.sh' }
 
   describe 'by default' do
     let(:params) { {} }
@@ -13,11 +14,12 @@ describe 'jira' do
     specify { should contain_archive(archive_name) }
     specify { should contain_user('jira') }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
+    specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
-    specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
+    specify { should contain_file(user_sh).with_content(/^JIRA_USER="jira"/) }
     specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
     specify { should contain_file(dbconfig_xml) }
     specify { should contain_file(dbconfig_xml).with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/) }
@@ -102,6 +104,7 @@ describe 'jira' do
 
     specify { should contain_user('jdoe') }
     specify { should contain_service('jdoe') }
+    specify { should contain_file(user_sh).with_content(/^JIRA_USER="jdoe"/) }
   end
 
   describe 'should not accept invalid service_uid' do

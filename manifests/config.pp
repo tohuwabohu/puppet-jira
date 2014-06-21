@@ -15,6 +15,7 @@ class jira::config inherits jira {
   $application_dir = $jira::application_dir
   $data_dir = $jira::data_dir
   $plugin_startup_timeout = $jira::plugin_startup_timeout
+  $service_name = $jira::service_name
 
   file { "${application_dir}/conf/server.xml":
     content => template('jira/server.xml.erb'),
@@ -39,8 +40,8 @@ class jira::config inherits jira {
 
   file { "${data_dir}/dbconfig.xml":
     content => template('jira/dbconfig.postgresql.xml.erb'),
-    owner   => $jira::service_name,
-    group   => $jira::service_name,
+    owner   => $service_name,
+    group   => $service_name,
     mode    => '0600',
   }
 }
