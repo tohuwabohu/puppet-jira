@@ -17,6 +17,12 @@ class jira::install inherits jira {
   $process = $jira::process
   $pid_file = "${jira::params::pid_directory}/${process}.pid"
   $version = $jira::version
+  $work_dirs = [
+    "${application_dir}/logs",
+    "${application_dir}/temp",
+    "${application_dir}/work",
+    "${application_dir}/conf/Catalina"
+  ]
 
   archive { "atlassian-jira-${version}":
     ensure        => present,
@@ -26,7 +32,10 @@ class jira::install inherits jira {
     src_target    => $jira::package_dir,
     root_dir      => "atlassian-jira-${version}-standalone",
     timeout       => 600,
-    require       => [File[$jira::install_dir], File[$jira::package_dir]],
+    require       => [
+      File[$jira::install_dir],
+      File[$jira::package_dir]
+    ],
   }
 
   file { $application_dir:
@@ -37,10 +46,7 @@ class jira::install inherits jira {
     require => Archive["atlassian-jira-${version}"],
   }
 
-  file { ["${application_dir}/logs",
-    "${application_dir}/temp",
-    "${application_dir}/work",
-    "${application_dir}/conf/Catalina"]:
+  file { $work_dirs:
     ensure  => directory,
     owner   => $process,
     group   => $process,
