@@ -85,6 +85,9 @@ class jira (
   }
 
   $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"
+  $pid_directory = $::osfamily ? {
+    default => "/var/run/${service_name}",
+  }
 
   class { 'jira::install': } ->
   class { 'jira::config': } ~>

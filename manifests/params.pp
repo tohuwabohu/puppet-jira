@@ -55,8 +55,4 @@ class jira::params {
   $service_script = $::osfamily ? {
     default => '/etc/init.d/jira',
   }
-
-  $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${service_name}",
-  }
 }
