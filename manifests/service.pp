@@ -15,8 +15,8 @@ class jira::service inherits jira {
   $service_script = $jira::params::service_script
 
   service { 'jira':
-    ensure   => $manage_service_ensure,
-    enable   => $manage_service_enable,
+    ensure   => $jira::manage_service_ensure,
+    enable   => $jira::manage_service_enable,
     provider => base,
     start    => "${service_script} start",
     restart  => "${service_script} restart",
