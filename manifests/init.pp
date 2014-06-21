@@ -81,14 +81,5 @@ class jira (
 
   class { 'jira::install': } ->
   class { 'jira::config': } ~>
-  service { 'jira':
-    ensure   => $manage_service_ensure,
-    enable   => $manage_service_enable,
-    provider => base,
-    start    => '/etc/init.d/jira start',
-    restart  => '/etc/init.d/jira restart',
-    stop     => '/etc/init.d/jira stop',
-    status   => '/etc/init.d/jira status',
-    require  => Package[$java_package],
-  }
+  class { 'jira::service': }
 }
