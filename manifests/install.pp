@@ -86,11 +86,13 @@ class jira::install inherits jira {
     mode   => '0644'
   }
 
-  cron { 'cleanup-jira-export':
-    ensure  => present,
-    command => "find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +7 -delete",
-    user    => 'root',
-    hour    => '5',
-    minute  => '0',
+  if (!empty($jira::purge_backups_after)) {
+    cron { 'cleanup-jira-export':
+      ensure  => present,
+      command => "find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
+      user    => 'root',
+      hour    => '5',
+      minute  => '0',
+    }
   }
 }

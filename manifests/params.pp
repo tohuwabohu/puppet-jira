@@ -34,6 +34,8 @@ class jira::params {
   }
   $plugin_startup_timeout = undef
 
+  $purge_backups_after = undef
+
   $package_dir = $::operatingsystem ? {
     default => '/var/cache/puppet/archives',
   }

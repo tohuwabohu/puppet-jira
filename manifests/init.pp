@@ -39,7 +39,9 @@ class jira (
   $java_opts              = params_lookup('java_opts'),
   $java_permgen           = params_lookup('java_permgen'),
   $java_package           = params_lookup('java_package'),
-  $plugin_startup_timeout = params_lookup('plugin_startup_timeout')
+  $plugin_startup_timeout = params_lookup('plugin_startup_timeout'),
+
+  $purge_backups_after    = params_lookup('purge_backups_after')
 ) inherits jira::params {
 
   if empty($hostname) {
@@ -77,6 +79,9 @@ class jira (
   }
   if empty($java_opts) {
     fail('Class[Jira]: java_opts must not be empty')
+  }
+  if !empty($purge_backups_after) and !is_integer($purge_backups_after) {
+    fail("Class[Jira]: purge_backups_after must be an interger, got '${purge_backups_after}'")
   }
 
   $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"
