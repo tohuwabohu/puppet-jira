@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type>postgres72</database-type>
+  <schema-name>public</schema-name>
+  <jdbc-datasource>
+    <url><%= scope.lookupvar('jira::db_url') %></url>
+    <driver-class><%= scope.lookupvar('jira::db_driver') %></driver-class>
+    <username><%= scope.lookupvar('jira::db_username') %></username>
+    <password><%= scope.lookupvar('jira::db_password') %></password>
+    <pool-size>15</pool-size>
+  </jdbc-datasource>
+</jira-database-config>
