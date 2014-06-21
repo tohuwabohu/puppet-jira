@@ -54,7 +54,7 @@ class jira::install inherits jira {
     require => User[$process],
   }
 
-  file { '/etc/init.d/jira':
+  file { $jira::params::service_script:
     ensure  => file,
     content => template('jira/jira.erb'),
     owner   => 'root',
