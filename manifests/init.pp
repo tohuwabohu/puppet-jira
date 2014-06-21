@@ -14,9 +14,9 @@ class jira (
   $hostname               = params_lookup('hostname'),
   $disable                = params_lookup('disable'),
   $version                = params_lookup('version'),
-  $md5                    = params_lookup('md5'),
   $process                = params_lookup('process'),
 
+  $md5sum                 = params_lookup('md5sum'),
   $package_dir            = params_lookup('package_dir'),
   $install_dir            = params_lookup('install_dir'),
   $data_dir               = params_lookup('data_dir'),

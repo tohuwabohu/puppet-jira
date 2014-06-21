@@ -49,13 +49,13 @@ describe 'jira' do
   end
 
   describe 'should accept empty md5sum' do
-    let(:params) { {:md5 => ''} }
+    let(:params) { {:md5sum => ''} }
 
     specify { should contain_archive(archive_name).with_digest_string('') }
   end
 
   describe 'with custom md5sum' do
-    let(:params) { {:md5 => 'beef'} }
+    let(:params) { {:md5sum => 'beef'} }
 
     specify { should contain_archive(archive_name).with_digest_string('beef') }
   end

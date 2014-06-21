@@ -26,7 +26,7 @@ class jira::install inherits jira {
 
   archive { "atlassian-jira-${version}":
     ensure        => present,
-    digest_string => $jira::md5,
+    digest_string => $jira::md5sum,
     url           => "http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-${version}.tar.gz",
     target        => $jira::install_dir,
     src_target    => $jira::package_dir,

@@ -13,7 +13,7 @@
 class jira::params {
   $hostname = $::fqdn
   $version = '6.2'
-  $md5 = '71a521cd983bc0892dc64027456cea25'
+  $md5sum = '71a521cd983bc0892dc64027456cea25'
   $process = 'jira'
 
   $db_url = 'jdbc:postgresql://localhost:5432/jira'
