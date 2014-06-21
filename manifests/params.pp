@@ -17,6 +17,7 @@ class jira::params {
   $process = 'jira'
 
   $db_url = 'jdbc:postgresql://localhost:5432/jira'
+  $db_type = 'postgres72'
   $db_driver = 'org.postgresql.Driver'
   $db_username = 'jira'
   $db_password = 'secret'

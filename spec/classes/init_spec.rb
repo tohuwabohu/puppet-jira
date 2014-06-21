@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'jira' do
   let(:title) { 'jira' }
+  let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
   let(:server_xml) { '/opt/atlassian-jira-6.2-standalone/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-jira-6.2-standalone/bin/setenv.sh' }
 
@@ -16,7 +17,12 @@ describe 'jira' do
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
     specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
-    specify { should contain_file('/var/lib/jira/dbconfig.xml') }
+    specify { should contain_file(dbconfig_xml) }
+    specify { should contain_file(dbconfig_xml).with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/) }
+    specify { should contain_file(dbconfig_xml).with_content(/<database-type>postgres72<\/database-type>/) }
+    specify { should contain_file(dbconfig_xml).with_content(/<driver-class>org.postgresql.Driver<\/driver-class>/) }
+    specify { should contain_file(dbconfig_xml).with_content(/<username>jira<\/username>/) }
+    specify { should contain_file(dbconfig_xml).with_content(/<password>secret<\/password>/) }
   end
 
   describe 'with version => 1.0.0' do
@@ -93,6 +99,14 @@ describe 'jira' do
     specify { should contain_file(setenv_sh).with_content(/-Xms512m -Xmx1024m/) }
   end
 
+  describe 'should not accept empty java opts' do
+    let(:params) { {:java_opts => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /java_opts/)
+    end
+  end
+
   describe 'with java_permgen => 256m' do
     let(:params) { {:java_permgen => '256m'} }
 
@@ -109,5 +123,43 @@ describe 'jira' do
     let(:params) { { :plugin_startup_timeout => 600} }
 
     specify { should contain_file(setenv_sh).with_content(/-Datlassian.plugins.enable.wait=600/) }
+  end
+
+  describe 'should not accept empty db_url' do
+    let(:params) { {:db_url => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /db_url/)
+    end
+  end
+
+  describe 'should not accept empty db_type' do
+    let(:params) { {:db_type => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /db_type/)
+    end
+  end
+
+  describe 'should not accept empty db_driver' do
+    let(:params) { {:db_driver => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /db_driver/)
+    end
+  end
+
+  describe 'should not accept empty db_username' do
+    let(:params) { {:db_username => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /db_username/)
+    end
+  end
+
+  describe 'should accept empty db_password' do
+    let(:params) { {:db_password => ''} }
+
+    specify { should contain_file(dbconfig_xml).with_content(/<password><\/password>/) }
   end
 end

@@ -3,7 +3,7 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type>postgres72</database-type>
+  <database-type><%= scope.lookupvar('jira::db_type') %></database-type>
   <schema-name>public</schema-name>
   <jdbc-datasource>
     <url><%= scope.lookupvar('jira::db_url') %></url>
