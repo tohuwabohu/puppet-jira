@@ -14,7 +14,6 @@ class jira::params {
   $hostname = $::fqdn
   $version = '6.2'
   $md5sum = '71a521cd983bc0892dc64027456cea25'
-  $process = 'jira'
 
   $db_url = 'jdbc:postgresql://localhost:5432/jira'
   $db_type = 'postgres72'
@@ -47,15 +46,15 @@ class jira::params {
     default => '/var/lib/jira',
   }
 
-  $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${process}",
-  }
-
   $service_name = 'jira'
   $service_uid = undef
   $service_gid = undef
   $service_disabled = false
   $service_script = $::osfamily ? {
     default => '/etc/init.d/jira',
+  }
+
+  $pid_directory = $::operatingsystem ? {
+    default => "/var/run/${service_name}",
   }
 }

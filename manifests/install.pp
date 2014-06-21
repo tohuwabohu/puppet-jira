@@ -14,8 +14,8 @@ class jira::install inherits jira {
 
   $application_dir = $jira::application_dir
   $data_dir = $jira::data_dir
-  $process = $jira::process
-  $pid_file = "${jira::params::pid_directory}/${process}.pid"
+  $service_name = $jira::service_name
+  $pid_file = "${jira::params::pid_directory}/${service_name}.pid"
   $version = $jira::version
   $work_dirs = [
     "${application_dir}/logs",
@@ -23,6 +23,17 @@ class jira::install inherits jira {
     "${application_dir}/work",
     "${application_dir}/conf/Catalina"
   ]
+
+  user { $service_name:
+    ensure     => present,
+    uid        => $jira::service_uid,
+    gid        => $jira::service_gid,
+    home       => $data_dir,
+    shell      => '/bin/false',
+    system     => true,
+    managehome => true,
+    require    => File[dirname($data_dir)],
+  }
 
   archive { "atlassian-jira-${version}":
     ensure        => present,
@@ -48,10 +59,9 @@ class jira::install inherits jira {
 
   file { $work_dirs:
     ensure  => directory,
-    owner   => $process,
-    group   => $process,
+    owner   => $service_name,
+    group   => $service_name,
     mode    => '0644',
-    require => User[$process],
   }
 
   file { $jira::params::service_script:
@@ -64,15 +74,15 @@ class jira::install inherits jira {
 
   file { $jira::params::pid_directory:
     ensure => directory,
-    owner  => $process,
-    group  => $process,
+    owner  => $service_name,
+    group  => $service_name,
     mode   => '0755',
   }
 
   file { "${data_dir}/export":
     ensure => directory,
-    owner  => $process,
-    group  => $process,
+    owner  => $service_name,
+    group  => $service_name,
     mode   => '0644'
   }
 
@@ -82,16 +92,5 @@ class jira::install inherits jira {
     user    => 'root',
     hour    => '5',
     minute  => '0',
-  }
-
-  user { $jira::service_name:
-    ensure     => present,
-    uid        => $jira::service_uid,
-    gid        => $jira::service_gid,
-    home       => $data_dir,
-    shell      => '/bin/false',
-    system     => true,
-    managehome => true,
-    require    => File[dirname($data_dir)],
   }
 }

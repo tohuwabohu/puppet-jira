@@ -39,8 +39,8 @@ class jira::config inherits jira {
 
   file { "${data_dir}/dbconfig.xml":
     content => template('jira/dbconfig.postgresql.xml.erb'),
-    owner   => $jira::process,
-    group   => $jira::process,
+    owner   => $jira::service_name,
+    group   => $jira::service_name,
     mode    => '0600',
   }
 }

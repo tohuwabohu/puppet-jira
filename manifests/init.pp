@@ -12,9 +12,7 @@
 #
 class jira (
   $hostname               = params_lookup('hostname'),
-  $disable                = params_lookup('disable'),
   $version                = params_lookup('version'),
-  $process                = params_lookup('process'),
 
   $service_name           = params_lookup('service_name'),
   $service_uid            = params_lookup('service_uid'),
@@ -60,10 +58,8 @@ class jira (
     fail("Class[Jira]: service_gid must be an interger, got '${service_gid}'")
   }
   if !is_bool($service_disabled) {
-    fail("Class[Jira]: service_disabled must be either true or false, got '${service_gid}'")
+    fail("Class[Jira]: service_disabled must be either true or false, got '${$service_disabled}'")
   }
-
-  validate_string($process)
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)
   validate_absolute_path($data_dir)
