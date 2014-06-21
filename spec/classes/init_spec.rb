@@ -30,38 +30,38 @@ describe 'jira' do
     specify { should contain_service('jira').with_ensure('stopped').with_enable(false) }
   end
 
-  describe 'default HTTP address and port' do
+  describe 'with default HTTP address and port' do
     let(:params) { {:protocols => ['http']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/address="127.0.0.1"/) }
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/port="8080"/) }
   end
 
-  describe 'empty HTTP address' do
+  describe 'with empty HTTP address' do
     let(:params) { {:http_address => '', :protocols => ['http']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').without_content(/address=/) }
   end
 
-  describe 'wildcard HTTP address' do
+  describe 'with wildcard HTTP address' do
     let(:params) { {:http_address => '*', :protocols => ['http']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').without_content(/address=/) }
   end
 
-  describe 'custom HTTP address' do
+  describe 'with custom HTTP address' do
     let(:params) { {:http_address => '1.2.3.4', :protocols => ['http']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/address="1.2.3.4"/) }
   end
 
-  describe 'custom HTTP port' do
+  describe 'with custom HTTP port' do
     let(:params) { {:http_port => '80', :protocols => ['http']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/port="80"/) }
   end
 
-  describe 'custom AJP port' do
+  describe 'with custom AJP port' do
     let(:params) { {:ajp_port => 1234, :protocols => ['ajp']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/port="1234"/) }
@@ -73,20 +73,20 @@ describe 'jira' do
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').without_content(/address=/) }
   end
 
-  describe 'wildcard AJP address' do
+  describe 'with wildcard AJP address' do
     let(:params) { {:ajp_address => '*', :protocols => ['ajp']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').without_content(/address=/) }
   end
 
-  describe 'custom AJP address' do
+  describe 'with custom AJP address' do
     let(:params) { {:ajp_address => '1.2.3.4', :protocols => ['ajp']} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/conf/server.xml').with_content(/address="1.2.3.4"/) }
   end
 
-  describe 'custom java opts' do
+  describe 'with custom java opts' do
     let(:params) { {:java_opts => '-Xms512m -Xmx1024m'} }
 
     specify { should contain_file('/opt/atlassian-jira-6.2-standalone/bin/setenv.sh').with_content(/-Xms512m -Xmx1024m/) }
