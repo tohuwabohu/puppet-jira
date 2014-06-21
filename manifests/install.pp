@@ -10,31 +10,23 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class jira::install($version, $md5, $install_dir, $package_dir, $application_dir, $data_dir, $process) {
-  validate_string($md5)
-  validate_absolute_path($install_dir)
-  validate_absolute_path($package_dir)
-  validate_absolute_path($application_dir)
-  validate_absolute_path($data_dir)
-  validate_string($process)
+class jira::install inherits jira {
 
-  $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${process}",
-  }
-
-  $pid_file = $::operatingsystem ? {
-    default => "${pid_directory}/${process}.pid",
-  }
+  $application_dir = $jira::application_dir
+  $data_dir = $jira::data_dir
+  $process = $jira::process
+  $pid_file = "${jira::params::pid_directory}/${process}.pid"
+  $version = $jira::version
 
   archive { "atlassian-jira-${version}":
     ensure        => present,
-    digest_string => $md5,
+    digest_string => $jira::md5,
     url           => "http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-${version}.tar.gz",
-    target        => $install_dir,
-    src_target    => $package_dir,
+    target        => $jira::install_dir,
+    src_target    => $jira::package_dir,
     root_dir      => "atlassian-jira-${version}-standalone",
     timeout       => 600,
-    require       => [File[$install_dir], File[$package_dir]],
+    require       => [File[$jira::install_dir], File[$jira::package_dir]],
   }
 
   file { $application_dir:

@@ -65,14 +65,7 @@ class jira (
   }
 
   class { 'jira::install':
-    version         => $jira::version,
-    md5             => $jira::md5,
-    install_dir     => $jira::install_dir,
-    package_dir     => $jira::package_dir,
-    application_dir => $jira::application_dir,
-    data_dir        => $jira::data_dir,
-    process         => $jira::process,
-    require         => Package[$java_package],
+    require => Package[$java_package],
   }
 
   class { 'jira::config':
