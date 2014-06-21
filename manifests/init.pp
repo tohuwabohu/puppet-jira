@@ -69,9 +69,7 @@ class jira (
   }
 
   class { 'jira::config':
-    application_dir => $jira::application_dir,
-    data_dir        => $jira::data_dir,
-    require         => Class['jira::package'],
+    require => Class['jira::package'],
   }
 
   service { 'jira':

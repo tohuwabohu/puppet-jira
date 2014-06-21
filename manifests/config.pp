@@ -10,9 +10,11 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class jira::config($application_dir, $data_dir) {
-  validate_absolute_path($application_dir)
-  validate_absolute_path($data_dir)
+class jira::config inherits jira {
+
+  $application_dir = $jira::application_dir
+  $data_dir = $jira::data_dir
+  $plugin_startup_timeout = $jira::plugin_startup_timeout
 
   file { "${application_dir}/conf/server.xml":
     content => template('jira/server.xml.erb'),
@@ -22,7 +24,6 @@ class jira::config($application_dir, $data_dir) {
     notify  => Service['jira'],
   }
 
-  $plugin_startup_timeout = $jira::plugin_startup_timeout
   file { "${application_dir}/bin/setenv.sh":
     content => template('jira/setenv.sh.erb'),
     owner   => 'root',
