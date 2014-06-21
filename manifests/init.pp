@@ -60,9 +60,7 @@ class jira (
     default => true,
   }
 
-  $application_dir = $::operatingsystem ? {
-    default => "${install_dir}/atlassian-jira-${jira::version}-standalone",
-  }
+  $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"
 
   class { 'jira::install': } ->
   class { 'jira::config': } ~>
