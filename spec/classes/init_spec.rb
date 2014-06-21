@@ -14,7 +14,7 @@ describe 'jira' do
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
-    specify { should contain_class("jira::package").with_require('Package[sun-java6-jdk]') }
+    specify { should contain_class('jira::install').with_require('Package[sun-java6-jdk]') }
     specify { should contain_cron('cleanup-jira-export').with_command('find /data/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
     specify { should contain_file('/data/jira/dbconfig.xml') }
   end
@@ -102,7 +102,7 @@ describe 'jira' do
   describe 'depends on custom java package' do
     let(:params) { {:java_package => 'custom-java-jdk'} }
 
-    specify { should contain_class("jira::package").with_require('Package[custom-java-jdk]') }
+    specify { should contain_class('jira::install').with_require('Package[custom-java-jdk]') }
   end
 
   describe 'with plugin_startup_timeout => 600' do

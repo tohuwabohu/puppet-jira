@@ -1,6 +1,6 @@
-# Class: jira::package
+# Class: jira::install
 #
-# Represents the jira package and resources created during the installation.
+# Installs JIRA.
 #
 # === Authors
 #
@@ -10,7 +10,7 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class jira::package($version, $md5, $install_dir, $package_dir, $application_dir, $data_dir, $process) {
+class jira::install($version, $md5, $install_dir, $package_dir, $application_dir, $data_dir, $process) {
   validate_string($md5)
   validate_absolute_path($install_dir)
   validate_absolute_path($package_dir)

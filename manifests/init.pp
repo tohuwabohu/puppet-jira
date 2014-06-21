@@ -64,7 +64,7 @@ class jira (
     default => "${install_dir}/atlassian-jira-${jira::version}-standalone",
   }
 
-  class { 'jira::package':
+  class { 'jira::install':
     version         => $jira::version,
     md5             => $jira::md5,
     install_dir     => $jira::install_dir,
