@@ -9,4 +9,4 @@ description 'This module installs and manages Atlassian JIRA.'
 
 dependency 'example42/puppi', '2.x'
 dependency 'gini/archive', '0.2.x'
-dependency 'puppetlabs/stdlib', '4.x'
+dependency 'puppetlabs/stdlib', '>= 4.2.0 < 5.0.0'

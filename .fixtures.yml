@@ -8,7 +8,7 @@ fixtures:
       ref: "v2.1.9"
     stdlib:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-      ref: "4.1.0"
+      ref: "4.2.1"
   symlinks:
     jira: "#{source_dir}"
 

@@ -16,6 +16,11 @@ class jira (
   $version                = params_lookup('version'),
   $process                = params_lookup('process'),
 
+  $service_name           = params_lookup('service_name'),
+  $service_uid            = params_lookup('service_uid'),
+  $service_gid            = params_lookup('service_gid'),
+  $service_disabled       = params_lookup('service_disabled'),
+
   $md5sum                 = params_lookup('md5sum'),
   $package_dir            = params_lookup('package_dir'),
   $install_dir            = params_lookup('install_dir'),
@@ -45,6 +50,19 @@ class jira (
   if empty($version) {
     fail('Class[Jira]: version must not be empty')
   }
+  if empty($service_name) {
+    fail('Class[Jira]: service_name must not be empty')
+  }
+  if !empty($service_uid) and !is_integer($service_uid) {
+    fail("Class[Jira]: service_uid must be an interger, got '${service_uid}'")
+  }
+  if !empty($service_gid) and !is_integer($service_gid) {
+    fail("Class[Jira]: service_gid must be an interger, got '${service_gid}'")
+  }
+  if !is_bool($service_disabled) {
+    fail("Class[Jira]: service_disabled must be either true or false, got '${service_gid}'")
+  }
+
   validate_string($process)
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)
@@ -63,18 +81,6 @@ class jira (
   }
   if empty($java_opts) {
     fail('Class[Jira]: java_opts must not be empty')
-  }
-
-  $bool_disable = any2bool($disable)
-
-  $manage_service_ensure = $jira::bool_disable ? {
-    true => 'stopped',
-    default => 'running',
-  }
-
-  $manage_service_enable = $jira::bool_disable ? {
-    true    => false,
-    default => true,
   }
 
   $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"

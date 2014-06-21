@@ -84,8 +84,10 @@ class jira::install inherits jira {
     minute  => '0',
   }
 
-  user { $process:
+  user { $jira::service_name:
     ensure     => present,
+    uid        => $jira::service_uid,
+    gid        => $jira::service_gid,
     home       => $data_dir,
     shell      => '/bin/false',
     system     => true,

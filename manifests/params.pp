@@ -51,6 +51,10 @@ class jira::params {
     default => "/var/run/${process}",
   }
 
+  $service_name = 'jira'
+  $service_uid = undef
+  $service_gid = undef
+  $service_disabled = false
   $service_script = $::osfamily ? {
     default => '/etc/init.d/jira',
   }

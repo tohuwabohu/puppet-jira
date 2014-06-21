@@ -11,6 +11,7 @@ describe 'jira' do
     let(:params) { {} }
 
     specify { should contain_archive(archive_name) }
+    specify { should contain_user('jira') }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
@@ -60,10 +61,87 @@ describe 'jira' do
     specify { should contain_archive(archive_name).with_digest_string('beef') }
   end
 
-  describe 'with disable => true' do
-    let(:params) { {:disable => true} }
+  describe 'should not accept empty service_disabled' do
+    let(:params) { {:service_disabled => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /service_disabled/)
+    end
+  end
+
+  describe 'should not accept invalid service_disabled' do
+    let(:params) { {:service_disabled => 'invalid'} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /service_disabled/)
+    end
+  end
+
+  describe 'with service_disabled => true' do
+    let(:params) { {:service_disabled => true} }
 
     specify { should contain_service('jira').with_ensure('stopped').with_enable(false) }
+  end
+
+  describe 'with service_disabled => false' do
+    let(:params) { {:service_disabled => false} }
+
+    specify { should contain_service('jira').with_ensure('running').with_enable(true) }
+  end
+
+  describe 'should not accept empty service_name' do
+    let(:params) { {:service_name => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /service_name/)
+    end
+  end
+
+  describe 'with custom service_name' do
+    let(:params) { {:service_name => 'jdoe'} }
+
+    specify { should contain_user('jdoe') }
+    specify { should contain_service('jdoe') }
+  end
+
+  describe 'should not accept invalid service_uid' do
+    let(:params) { {:service_uid => 'invalid'} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /service_uid/)
+    end
+  end
+
+  describe 'should accept valid service_uid' do
+    let(:params) { {:service_uid => 500} }
+
+    specify { should contain_user('jira').with_uid(500) }
+  end
+
+  describe 'should accept empty service_uid' do
+    let(:params) { {:service_gid => ''} }
+
+    specify { should contain_user('jira').with_uid('') }
+  end
+
+  describe 'should not accept invalid service_gid' do
+    let(:params) { {:service_gid => 'invalid'} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /service_gid/)
+    end
+  end
+
+  describe 'should accept valid service_gid' do
+    let(:params) { {:service_gid => 500} }
+
+    specify { should contain_user('jira').with_gid(500) }
+  end
+
+  describe 'should accept empty service_gid' do
+    let(:params) { {:service_gid => ''} }
+
+    specify { should contain_user('jira').with_gid('') }
   end
 
   describe 'with default HTTP address and port' do
