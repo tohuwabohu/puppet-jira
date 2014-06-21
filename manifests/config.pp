@@ -21,7 +21,6 @@ class jira::config inherits jira {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['jira'],
   }
 
   file { "${application_dir}/bin/setenv.sh":
@@ -29,7 +28,6 @@ class jira::config inherits jira {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    notify  => Service['jira'],
   }
 
   file { "${application_dir}/bin/user.sh":
@@ -37,7 +35,6 @@ class jira::config inherits jira {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    notify  => Service['jira'],
   }
 
   file { "${data_dir}/dbconfig.xml":
@@ -45,6 +42,5 @@ class jira::config inherits jira {
     owner   => $jira::process,
     group   => $jira::process,
     mode    => '0600',
-    notify  => Service['jira'],
   }
 }

@@ -64,14 +64,8 @@ class jira (
     default => "${install_dir}/atlassian-jira-${jira::version}-standalone",
   }
 
-  class { 'jira::install':
-    require => Package[$java_package],
-  }
-
-  class { 'jira::config':
-    require => Class['jira::package'],
-  }
-
+  class { 'jira::install': } ->
+  class { 'jira::config': } ~>
   service { 'jira':
     ensure   => $manage_service_ensure,
     enable   => $manage_service_enable,
@@ -80,6 +74,6 @@ class jira (
     restart  => '/etc/init.d/jira restart',
     stop     => '/etc/init.d/jira stop',
     status   => '/etc/init.d/jira status',
-    require  => Class['jira::config'],
+    require  => Package[$java_package],
   }
 }
