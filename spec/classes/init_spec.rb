@@ -13,6 +13,7 @@ describe 'jira' do
 
     specify { should contain_archive(archive_name) }
     specify { should contain_user('jira') }
+    specify { should contain_group('jira') }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
     specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
@@ -103,6 +104,7 @@ describe 'jira' do
     let(:params) { {:service_name => 'jdoe'} }
 
     specify { should contain_user('jdoe') }
+    specify { should contain_group('jdoe') }
     specify { should contain_service('jdoe') }
     specify { should contain_file(user_sh).with_content(/^JIRA_USER="jdoe"/) }
   end
@@ -138,13 +140,15 @@ describe 'jira' do
   describe 'should accept valid service_gid' do
     let(:params) { {:service_gid => 500} }
 
-    specify { should contain_user('jira').with_gid(500) }
+    specify { should contain_user('jira').with_gid('jira') }
+    specify { should contain_group('jira').with_gid(500) }
   end
 
   describe 'should accept empty service_gid' do
     let(:params) { {:service_gid => ''} }
 
-    specify { should contain_user('jira').with_gid('') }
+    specify { should contain_user('jira').with_gid('jira') }
+    specify { should contain_group('jira').with_gid('') }
   end
 
   describe 'with default HTTP address and port' do

@@ -24,15 +24,28 @@ class jira::install inherits jira {
     "${application_dir}/conf/Catalina"
   ]
 
+  group { $service_name:
+    ensure => present,
+    gid    => $jira::service_gid,
+    system => true,
+  }
+
   user { $service_name:
     ensure     => present,
     uid        => $jira::service_uid,
-    gid        => $jira::service_gid,
+    gid        => $service_name,
     home       => $data_dir,
     shell      => '/bin/false',
     system     => true,
     managehome => true,
-    require    => File[dirname($data_dir)],
+  }
+
+  file { $data_dir:
+    ensure  => directory,
+    owner   => $service_name,
+    group   => $service_name,
+    mode    => '0644',
+    require => User[$service_name],
   }
 
   archive { "atlassian-jira-${version}":
