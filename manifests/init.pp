@@ -39,7 +39,12 @@ class jira (
   $plugin_startup_timeout = params_lookup('plugin_startup_timeout')
 ) inherits jira::params {
 
-  validate_string($md5)
+  if empty($hostname) {
+    fail('Class[Jira]: hostname must not be empty')
+  }
+  if empty($version) {
+    fail('Class[Jira]: version must not be empty')
+  }
   validate_string($process)
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)

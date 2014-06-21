@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'jira' do
   let(:title) { 'jira' }
+  let(:archive_name) { 'atlassian-jira-6.2' }
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
   let(:server_xml) { '/opt/atlassian-jira-6.2-standalone/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-jira-6.2-standalone/bin/setenv.sh' }
@@ -9,7 +10,7 @@ describe 'jira' do
   describe 'by default' do
     let(:params) { {} }
 
-    specify { should contain_archive('atlassian-jira-6.2') }
+    specify { should contain_archive(archive_name) }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
@@ -25,10 +26,38 @@ describe 'jira' do
     specify { should contain_file(dbconfig_xml).with_content(/<password>secret<\/password>/) }
   end
 
+  describe 'should not accept empty hostname' do
+    let(:params) { {:hostname => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /hostname/)
+    end
+  end
+
   describe 'with version => 1.0.0' do
     let(:params) { {:version => '1.0.0'} }
 
     specify { should contain_archive('atlassian-jira-1.0.0') }
+  end
+
+  describe 'should not accept empty version' do
+    let(:params) { {:version => ''} }
+
+    specify do
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /version/)
+    end
+  end
+
+  describe 'should accept empty md5sum' do
+    let(:params) { {:md5 => ''} }
+
+    specify { should contain_archive(archive_name).with_digest_string('') }
+  end
+
+  describe 'with custom md5sum' do
+    let(:params) { {:md5 => 'beef'} }
+
+    specify { should contain_archive(archive_name).with_digest_string('beef') }
   end
 
   describe 'with disable => true' do
