@@ -43,7 +43,7 @@ class jira::params {
   }
 
   $data_dir = $::operatingsystem ? {
-    default => '/data/jira',
+    default => '/var/lib/jira',
   }
 
   $pid_directory = $::operatingsystem ? {

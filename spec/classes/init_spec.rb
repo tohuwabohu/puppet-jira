@@ -15,8 +15,8 @@ describe 'jira' do
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
-    specify { should contain_cron('cleanup-jira-export').with_command('find /data/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
-    specify { should contain_file('/data/jira/dbconfig.xml') }
+    specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
+    specify { should contain_file('/var/lib/jira/dbconfig.xml') }
   end
 
   describe 'with version => 1.0.0' do
