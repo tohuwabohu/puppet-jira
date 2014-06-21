@@ -62,7 +62,7 @@ class jira::install inherits jira {
     mode    => '0755',
   }
 
-  file { $pid_directory:
+  file { $jira::params::pid_directory:
     ensure => directory,
     owner  => $process,
     group  => $process,
