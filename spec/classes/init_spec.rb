@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'jira' do
   let(:title) {'jira'}
-  let(:facts) { {:postgres_default_version => '9.2', :operatingsystem => 'Debian', :osfamily => 'Debian'} }
 
   describe 'by default' do
     let(:params) { {} }
