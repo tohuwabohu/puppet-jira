@@ -295,6 +295,7 @@ describe 'jira' do
     let(:params) { {:purge_backups_after => 7} }
 
     specify { should contain_cron('cleanup-jira-export').with_ensure('present') }
+    specify { should contain_cron('cleanup-jira-export').with_user('jira') }
     specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
   end
 end

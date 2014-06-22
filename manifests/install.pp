@@ -106,7 +106,7 @@ class jira::install inherits jira {
   cron { 'cleanup-jira-export':
     ensure  => $cron_ensure,
     command => "find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
-    user    => 'root',
+    user    => $service_name,
     hour    => '5',
     minute  => '0',
   }
