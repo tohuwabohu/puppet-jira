@@ -81,7 +81,7 @@ class jira (
     fail('Class[Jira]: java_opts must not be empty')
   }
   if !empty($purge_backups_after) and !is_integer($purge_backups_after) {
-    fail("Class[Jira]: purge_backups_after must be an interger, got '${purge_backups_after}'")
+    fail("Class[Jira]: purge_backups_after must be an integer, got '${purge_backups_after}'")
   }
 
   $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"
