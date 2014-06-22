@@ -86,7 +86,7 @@ class jira::install inherits jira {
   file { $current_dir:
     ensure => link,
     target => $application_dir,
-    notify => Service[$service_name],
+    notify => Class['jira::service'],
   }
 
   file { $work_dirs:
