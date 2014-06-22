@@ -89,10 +89,10 @@ class jira::install inherits jira {
   }
 
   file { $work_dirs:
-    ensure  => directory,
-    owner   => $service_name,
-    group   => $service_name,
-    mode    => '0644',
+    ensure => directory,
+    owner  => $service_name,
+    group  => $service_name,
+    mode   => '0644',
   }
 
   file { $jira::params::service_script:
