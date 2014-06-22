@@ -23,6 +23,10 @@ class jira::install inherits jira {
     "${application_dir}/work",
     "${application_dir}/conf/Catalina"
   ]
+  $cron_ensure = empty($jira::purge_backups_after) ? {
+    true    => absent,
+    default => present,
+  }
 
   group { $service_name:
     ensure => present,
@@ -99,13 +103,11 @@ class jira::install inherits jira {
     mode   => '0644'
   }
 
-  if (!empty($jira::purge_backups_after)) {
-    cron { 'cleanup-jira-export':
-      ensure  => present,
-      command => "find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
-      user    => 'root',
-      hour    => '5',
-      minute  => '0',
-    }
+  cron { 'cleanup-jira-export':
+    ensure  => $cron_ensure,
+    command => "find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
+    user    => 'root',
+    hour    => '5',
+    minute  => '0',
   }
 }

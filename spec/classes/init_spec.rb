@@ -21,7 +21,7 @@ describe 'jira' do
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_file(user_sh).with_content(/^JIRA_USER="jira"/) }
-    specify { should_not contain_cron('cleanup-jira-export') }
+    specify { should contain_cron('cleanup-jira-export').with_ensure('absent') }
     specify { should contain_file(dbconfig_xml) }
     specify { should contain_file(dbconfig_xml).with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/) }
     specify { should contain_file(dbconfig_xml).with_content(/<database-type>postgres72<\/database-type>/) }
@@ -281,19 +281,20 @@ describe 'jira' do
     let(:params) { {:purge_backups_after => 'invalid'} }
 
     specify do
-      expect { should_not contain_cron('cleanup-jira-export') }.to raise_error(Puppet::Error, /purge_backups_after/)
+      expect { should contain_cron('cleanup-jira-export') }.to raise_error(Puppet::Error, /purge_backups_after/)
     end
   end
 
   describe 'should accept empty purge_backups_after' do
     let(:params) { {:purge_backups_after => ''} }
 
-    specify { should_not contain_cron('cleanup-jira-export') }
+    specify { should contain_cron('cleanup-jira-export').with_ensure('absent') }
   end
 
   describe 'with purge_backups_after => 7 days' do
     let(:params) { {:purge_backups_after => 7} }
 
+    specify { should contain_cron('cleanup-jira-export').with_ensure('present') }
     specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
   end
 end
