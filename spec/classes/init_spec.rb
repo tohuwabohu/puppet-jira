@@ -296,6 +296,6 @@ describe 'jira' do
 
     specify { should contain_cron('cleanup-jira-export').with_ensure('present') }
     specify { should contain_cron('cleanup-jira-export').with_user('jira') }
-    specify { should contain_cron('cleanup-jira-export').with_command('find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
+    specify { should contain_cron('cleanup-jira-export').with_command('/usr/bin/find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
   end
 end
