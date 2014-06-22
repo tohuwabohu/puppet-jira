@@ -110,5 +110,6 @@ class jira::install inherits jira {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
+    require => File["${data_dir}/export"],
   }
 }
