@@ -26,7 +26,7 @@ class jira::install inherits jira {
   ]
   $cron_ensure = empty($jira::purge_backups_after) ? {
     true    => absent,
-    default => present,
+    default => file,
   }
 
   group { $service_name:
@@ -104,11 +104,11 @@ class jira::install inherits jira {
     mode   => '0644'
   }
 
-  cron { 'cleanup-jira-export':
+  file { '/etc/cron.daily/purge-old-jira-backups':
     ensure  => $cron_ensure,
-    command => "/usr/bin/find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
-    user    => $service_name,
-    hour    => '5',
-    minute  => '0',
+    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
   }
 }

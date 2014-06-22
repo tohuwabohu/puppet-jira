@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'jira' do
   let(:title) { 'jira' }
   let(:archive_name) { 'atlassian-jira-6.2' }
+  let(:cron_script) { '/etc/cron.daily/purge-old-jira-backups' }
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
   let(:server_xml) { '/opt/atlassian-jira-6.2-standalone/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-jira-6.2-standalone/bin/setenv.sh' }
@@ -21,7 +22,7 @@ describe 'jira' do
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_file(user_sh).with_content(/^JIRA_USER="jira"/) }
-    specify { should contain_cron('cleanup-jira-export').with_ensure('absent') }
+    specify { should contain_file(cron_script).with_ensure('absent') }
     specify { should contain_file(dbconfig_xml) }
     specify { should contain_file(dbconfig_xml).with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/) }
     specify { should contain_file(dbconfig_xml).with_content(/<database-type>postgres72<\/database-type>/) }
@@ -281,21 +282,21 @@ describe 'jira' do
     let(:params) { {:purge_backups_after => 'invalid'} }
 
     specify do
-      expect { should contain_cron('cleanup-jira-export') }.to raise_error(Puppet::Error, /purge_backups_after/)
+      expect { should contain_class('jira') }.to raise_error(Puppet::Error, /purge_backups_after/)
     end
   end
 
   describe 'should accept empty purge_backups_after' do
     let(:params) { {:purge_backups_after => ''} }
 
-    specify { should contain_cron('cleanup-jira-export').with_ensure('absent') }
+    specify { should contain_file(cron_script).with_ensure('absent') }
   end
 
   describe 'with purge_backups_after => 7 days' do
     let(:params) { {:purge_backups_after => 7} }
 
-    specify { should contain_cron('cleanup-jira-export').with_ensure('present') }
-    specify { should contain_cron('cleanup-jira-export').with_user('jira') }
-    specify { should contain_cron('cleanup-jira-export').with_command('/usr/bin/find /var/lib/jira/export/ -name "*.zip" -type f -mtime +7 -delete') }
+    specify { should contain_file(cron_script).with_ensure('file') }
+    specify { should contain_file(cron_script).with_content(/\/var\/lib\/jira\/export\//) }
+    specify { should contain_file(cron_script).with_content(/-mtime \+7/) }
   end
 end
