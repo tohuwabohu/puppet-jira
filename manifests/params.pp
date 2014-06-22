@@ -48,6 +48,10 @@ class jira::params {
     default => '/var/lib/jira',
   }
 
+  $run_dir = $::osfamily ? {
+    default => '/var/run'
+  }
+
   $service_name = 'jira'
   $service_uid = undef
   $service_gid = undef

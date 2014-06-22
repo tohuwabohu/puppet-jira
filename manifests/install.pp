@@ -15,7 +15,8 @@ class jira::install inherits jira {
   $application_dir = $jira::application_dir
   $data_dir = $jira::data_dir
   $service_name = $jira::service_name
-  $pid_file = "${jira::pid_directory}/${service_name}.pid"
+  $pid_directory = "${jira::params::run_dir}/${service_name}"
+  $pid_file = "${pid_directory}/${service_name}.pid"
   $version = $jira::version
   $work_dirs = [
     "${application_dir}/logs",
