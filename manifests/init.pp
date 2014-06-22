@@ -84,8 +84,6 @@ class jira (
     fail("Class[Jira]: purge_backups_after must be an integer, got '${purge_backups_after}'")
   }
 
-  $application_dir = "${install_dir}/atlassian-jira-${version}-standalone"
-
   class { 'jira::install': } ->
   class { 'jira::config': } ~>
   class { 'jira::service': }

@@ -12,26 +12,26 @@
 #
 class jira::config inherits jira {
 
-  $application_dir = $jira::application_dir
+  $current_dir = $jira::install::current_dir
   $data_dir = $jira::data_dir
   $plugin_startup_timeout = $jira::plugin_startup_timeout
   $service_name = $jira::service_name
 
-  file { "${application_dir}/conf/server.xml":
+  file { "${current_dir}/conf/server.xml":
     content => template('jira/server.xml.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
   }
 
-  file { "${application_dir}/bin/setenv.sh":
+  file { "${current_dir}/bin/setenv.sh":
     content => template('jira/setenv.sh.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
   }
 
-  file { "${application_dir}/bin/user.sh":
+  file { "${current_dir}/bin/user.sh":
     content => template('jira/user.sh.erb'),
     owner   => 'root',
     group   => 'root',

@@ -16,8 +16,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=jira
 DESC="Atlassian JIRA"
 PIDFILE=<%= @pid_file %>
-START_SCRIPT=<%= @application_dir %>/bin/start-jira.sh
-STOP_SCRIPT=<%= @application_dir %>/bin/stop-jira.sh
+START_SCRIPT=<%= @current_dir %>/bin/start-jira.sh
+STOP_SCRIPT=<%= @current_dir %>/bin/stop-jira.sh
 
 test -f /lib/lsb/init-functions || exit 1
 . /lib/lsb/init-functions

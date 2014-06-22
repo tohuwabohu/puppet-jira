@@ -3,11 +3,13 @@ require 'spec_helper'
 describe 'jira' do
   let(:title) { 'jira' }
   let(:archive_name) { 'atlassian-jira-6.2' }
+  let(:application_dir) { "/opt/#{archive_name}-standalone" }
   let(:cron_script) { '/etc/cron.daily/purge-old-jira-backups' }
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
-  let(:server_xml) { '/opt/atlassian-jira-6.2-standalone/conf/server.xml' }
-  let(:setenv_sh) { '/opt/atlassian-jira-6.2-standalone/bin/setenv.sh' }
-  let(:user_sh) { '/opt/atlassian-jira-6.2-standalone/bin/user.sh' }
+  let(:service_script) { '/etc/init.d/jira' }
+  let(:server_xml) { '/opt/atlassian-jira-current/conf/server.xml' }
+  let(:setenv_sh) { '/opt/atlassian-jira-current/bin/setenv.sh' }
+  let(:user_sh) { '/opt/atlassian-jira-current/bin/user.sh' }
 
   describe 'by default' do
     let(:params) { {} }
@@ -17,6 +19,8 @@ describe 'jira' do
     specify { should contain_group('jira') }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
     specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
+    specify { should contain_file(application_dir) }
+    specify { should contain_file('/opt/atlassian-jira-current').with_target(application_dir) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
@@ -29,6 +33,10 @@ describe 'jira' do
     specify { should contain_file(dbconfig_xml).with_content(/<driver-class>org.postgresql.Driver<\/driver-class>/) }
     specify { should contain_file(dbconfig_xml).with_content(/<username>jira<\/username>/) }
     specify { should contain_file(dbconfig_xml).with_content(/<password>secret<\/password>/) }
+    specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/jira\/jira.pid$/) }
+    specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-jira-current\/bin\/start-jira.sh$/) }
+    specify { should contain_file(service_script).with_content(/^STOP_SCRIPT=\/opt\/atlassian-jira-current\/bin\/stop-jira.sh$/) }
+    specify { should contain_file(service_script).with_content(/^cd \/var\/lib\/jira$/) }
   end
 
   describe 'should not accept empty hostname' do

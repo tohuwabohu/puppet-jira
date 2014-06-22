@@ -12,12 +12,19 @@
 #
 class jira::install inherits jira {
 
-  $application_dir = $jira::application_dir
+  $version = $jira::version
+  $archive_name = "atlassian-jira-${version}"
+  $archive_root_dir = "${archive_name}-standalone"
+  $archive_md5sum = $jira::md5sum
+  $archive_url = "http://www.atlassian.com/software/jira/downloads/binary/${archive_name}.tar.gz"
+
+  $application_dir = "${jira::install_dir}/${archive_root_dir}"
+  $current_dir = "${jira::install_dir}/atlassian-jira-current"
   $data_dir = $jira::data_dir
+
   $service_name = $jira::service_name
   $pid_directory = "${jira::params::run_dir}/${service_name}"
   $pid_file = "${pid_directory}/${service_name}.pid"
-  $version = $jira::version
   $work_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",
@@ -53,13 +60,13 @@ class jira::install inherits jira {
     require => User[$service_name],
   }
 
-  archive { "atlassian-jira-${version}":
+  archive { $archive_name:
     ensure        => present,
-    digest_string => $jira::md5sum,
-    url           => "http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-${version}.tar.gz",
+    digest_string => $archive_md5sum,
+    url           => $archive_url,
     target        => $jira::install_dir,
     src_target    => $jira::package_dir,
-    root_dir      => "atlassian-jira-${version}-standalone",
+    root_dir      => $archive_root_dir,
     timeout       => 600,
     require       => [
       File[$jira::install_dir],
@@ -72,7 +79,13 @@ class jira::install inherits jira {
     owner   => root,
     group   => root,
     mode    => '0644',
-    require => Archive["atlassian-jira-${version}"],
+    require => Archive[$archive_name],
+  }
+
+  file { $current_dir:
+    ensure => link,
+    target => $application_dir,
+    notify => Service[$service_name],
   }
 
   file { $work_dirs:
