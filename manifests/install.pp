@@ -21,6 +21,7 @@ class jira::install inherits jira {
   $application_dir = "${jira::install_dir}/${archive_root_dir}"
   $current_dir = "${jira::install_dir}/atlassian-jira-current"
   $data_dir = $jira::data_dir
+  $backup_dir = "${data_dir}/export"
 
   $service_name = $jira::service_name
   $pid_directory = "${jira::params::run_dir}/${service_name}"
@@ -110,7 +111,7 @@ class jira::install inherits jira {
     mode   => '0755',
   }
 
-  file { "${data_dir}/export":
+  file { $backup_dir:
     ensure => directory,
     owner  => $service_name,
     group  => $service_name,
@@ -119,10 +120,10 @@ class jira::install inherits jira {
 
   file { '/etc/cron.daily/purge-old-jira-backups':
     ensure  => $cron_ensure,
-    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
+    content => "#!/bin/bash\n/usr/bin/find ${backup_dir}/ -name \"*.zip\" -type f -mtime +${jira::purge_backups_after} -delete",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${data_dir}/export"],
+    require => File[$backup_dir],
   }
 }
