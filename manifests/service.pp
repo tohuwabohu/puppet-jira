@@ -13,11 +13,11 @@
 class jira::service inherits jira {
 
   $service_script = $jira::params::service_script
-  $service_ensure = any2bool($jira::service_disabled) ? {
+  $service_ensure = $jira::service_disabled ? {
     true    => stopped,
     default => running,
   }
-  $service_enable = any2bool($jira::service_disabled) ? {
+  $service_enable = $jira::service_disabled ? {
     true    => false,
     default => true,
   }
