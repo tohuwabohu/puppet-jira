@@ -11,37 +11,37 @@
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
 class jira (
-  $hostname               = params_lookup('hostname'),
-  $version                = params_lookup('version'),
+  $hostname               = $jira::params::hostname,
+  $version                = $jira::params::version,
 
-  $service_name           = params_lookup('service_name'),
-  $service_uid            = params_lookup('service_uid'),
-  $service_gid            = params_lookup('service_gid'),
-  $service_disabled       = params_lookup('service_disabled'),
+  $service_name           = $jira::params::service_name,
+  $service_uid            = $jira::params::service_uid,
+  $service_gid            = $jira::params::service_gid,
+  $service_disabled       = $jira::params::service_disabled,
 
-  $md5sum                 = params_lookup('md5sum'),
-  $package_dir            = params_lookup('package_dir'),
-  $install_dir            = params_lookup('install_dir'),
-  $data_dir               = params_lookup('data_dir'),
+  $md5sum                 = $jira::params::md5sum,
+  $package_dir            = $jira::params::package_dir,
+  $install_dir            = $jira::params::install_dir,
+  $data_dir               = $jira::params::data_dir,
 
-  $db_url                 = params_lookup('db_url'),
-  $db_type                = params_lookup('db_type'),
-  $db_driver              = params_lookup('db_driver'),
-  $db_username            = params_lookup('db_username'),
-  $db_password            = params_lookup('db_password'),
+  $db_url                 = $jira::params::db_url,
+  $db_type                = $jira::params::db_type,
+  $db_driver              = $jira::params::db_driver,
+  $db_username            = $jira::params::db_username,
+  $db_password            = $jira::params::db_password,
 
-  $http_address           = params_lookup('http_address'),
-  $http_port              = params_lookup('http_port'),
-  $ajp_address            = params_lookup('ajp_address'),
-  $ajp_port               = params_lookup('ajp_port'),
-  $protocols              = params_lookup('protocols'),
+  $http_address           = $jira::params::http_address,
+  $http_port              = $jira::params::http_port,
+  $ajp_address            = $jira::params::ajp_address,
+  $ajp_port               = $jira::params::ajp_port,
+  $protocols              = $jira::params::protocols,
 
-  $java_opts              = params_lookup('java_opts'),
-  $java_permgen           = params_lookup('java_permgen'),
-  $java_package           = params_lookup('java_package'),
-  $plugin_startup_timeout = params_lookup('plugin_startup_timeout'),
+  $java_opts              = $jira::params::java_opts,
+  $java_permgen           = $jira::params::java_permgen,
+  $java_package           = $jira::params::java_package,
+  $plugin_startup_timeout = $jira::params::plugin_startup_timeout,
 
-  $purge_backups_after    = params_lookup('purge_backups_after')
+  $purge_backups_after    = $jira::params::purge_backups_after
 ) inherits jira::params {
 
   if empty($hostname) {
