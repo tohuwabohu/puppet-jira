@@ -62,14 +62,15 @@ class jira::install inherits jira {
   }
 
   archive { $archive_name:
-    ensure        => present,
-    digest_string => $archive_md5sum,
-    url           => $archive_url,
-    target        => $jira::install_dir,
-    src_target    => $jira::package_dir,
-    root_dir      => $archive_root_dir,
-    timeout       => 600,
-    require       => [
+    ensure           => present,
+    digest_string    => $archive_md5sum,
+    url              => $archive_url,
+    target           => $jira::install_dir,
+    src_target       => $jira::package_dir,
+    root_dir         => $archive_root_dir,
+    follow_redirects => true,
+    timeout          => 600,
+    require          => [
       File[$jira::install_dir],
       File[$jira::package_dir]
     ],
