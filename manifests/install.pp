@@ -25,7 +25,6 @@ class jira::install inherits jira {
 
   $service_name = $jira::service_name
   $pid_directory = "${jira::params::run_dir}/${service_name}"
-  $pid_file = "${pid_directory}/${service_name}.pid"
   $work_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",
@@ -103,13 +102,6 @@ class jira::install inherits jira {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-  }
-
-  file { $pid_directory:
-    ensure => directory,
-    owner  => $service_name,
-    group  => $service_name,
-    mode   => '0755',
   }
 
   file { $backup_dir:

@@ -15,7 +15,9 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=jira
 DESC="Atlassian JIRA"
-PIDFILE=<%= @pid_file %>
+PIDDIR=<%= @pid_directory %>
+PIDFILE=<%= "#{@pid_directory}/#{@service_name}.pid" %>
+DAEMONUSER=<%= @service_name %>
 START_SCRIPT=<%= @current_dir %>/bin/start-jira.sh
 STOP_SCRIPT=<%= @current_dir %>/bin/stop-jira.sh
 
@@ -28,6 +30,7 @@ cd <%= @data_dir %>
 case "$1" in
     start)
         log_daemon_msg "Starting $DESC" "$NAME"
+        mkdir -p $PIDDIR && chown $DAEMONUSER:$DAEMONUSER $PIDDIR
         if CATALINA_PID="$PIDFILE" $START_SCRIPT > /dev/null 2>&1; then
             log_end_msg 0
         else
