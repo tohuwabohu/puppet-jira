@@ -16,7 +16,7 @@ class jira::install inherits jira {
   $archive_name = "atlassian-jira-${version}"
   $archive_root_dir = "${archive_name}-standalone"
   $archive_md5sum = $jira::md5sum
-  $archive_url = "http://www.atlassian.com/software/jira/downloads/binary/${archive_name}.tar.gz"
+  $archive_url = "http://downloads.atlassian.com/software/jira/downloads/${archive_name}.tar.gz"
 
   $application_dir = "${jira::install_dir}/${archive_root_dir}"
   $current_dir = "${jira::install_dir}/atlassian-jira-current"
