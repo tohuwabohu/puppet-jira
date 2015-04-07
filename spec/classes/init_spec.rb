@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'jira' do
   let(:title) { 'jira' }
-  let(:archive_name) { 'atlassian-jira-6.2' }
+  let(:archive_name) { 'atlassian-jira-6.4' }
   let(:application_dir) { "/opt/#{archive_name}-standalone" }
   let(:cron_script) { '/etc/cron.daily/purge-old-jira-backups' }
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
@@ -36,7 +36,7 @@ describe 'jira' do
     specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/jira\/jira.pid$/) }
     specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-jira-current\/bin\/start-jira.sh$/) }
     specify { should contain_file(service_script).with_content(/^STOP_SCRIPT=\/opt\/atlassian-jira-current\/bin\/stop-jira.sh$/) }
-    specify { should contain_file(service_script).with_content(/^cd \/var\/lib\/jira$/) }
+    specify { should contain_file(service_script).with_content(/^export JIRA_HOME="\/var\/lib\/jira"$/) }
   end
 
   describe 'should not accept empty hostname' do

@@ -25,7 +25,7 @@ test -f /lib/lsb/init-functions || exit 1
 . /lib/lsb/init-functions
 
 # see https://confluence.atlassian.com/display/JIRA/Setting+your+JIRA+Home+Directory
-exprt JIRA_HOME=<%= @data_dir %>
+export JIRA_HOME="<%= @data_dir %>"
 test -d "$JIRA_HOME" || exit 1
 cd "$JIRA_HOME"
 
