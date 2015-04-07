@@ -24,11 +24,16 @@ class jira::config inherits jira {
     mode    => '0644',
   }
 
-  file { "${current_dir}/bin/setenv.sh":
-    content => template('jira/setenv.sh.erb'),
+  file_line { "${current_dir}/bin/setenv.sh":
+    path => "${current_dir}/bin/setenv.sh",
+    line => '. `dirname $0`/setenv2.sh',
+  }
+
+  file { "${current_dir}/bin/setenv2.sh":
+    content => template('jira/setenv2.sh.erb'),
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0555',
   }
 
   file { "${current_dir}/bin/user.sh":

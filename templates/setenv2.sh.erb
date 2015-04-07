@@ -1,0 +1,9 @@
+<%-
+    jvm_args = scope.lookupvar('jira::java_opts')
+    jvm_args += " -Datlassian.plugins.enable.wait=#{@plugin_startup_timeout}" if @plugin_startup_timeout
+-%>
+#
+# This file is managed by Puppet
+#
+
+export JAVA_OPTS="$JAVA_OPTS <%= jvm_args %>"

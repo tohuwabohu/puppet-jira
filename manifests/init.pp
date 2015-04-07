@@ -37,7 +37,6 @@ class jira (
   $protocols              = $jira::params::protocols,
 
   $java_opts              = $jira::params::java_opts,
-  $java_permgen           = $jira::params::java_permgen,
   $java_package           = $jira::params::java_package,
   $plugin_startup_timeout = $jira::params::plugin_startup_timeout,
 

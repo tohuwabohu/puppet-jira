@@ -27,8 +27,7 @@ class jira::params {
   $ajp_port = 8009
   $protocols = ['http', 'ajp']
 
-  $java_opts = '-Xms384m -Xmx768m'
-  $java_permgen = '384m'
+  $java_opts = '-Xms384m -Xmx768m -XX:MaxPermSize=384m'
   $java_package = $::operatingsystem ? {
     default => 'sun-java6-jdk',
   }

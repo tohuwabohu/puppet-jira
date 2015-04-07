@@ -8,7 +8,7 @@ describe 'jira' do
   let(:dbconfig_xml) { '/var/lib/jira/dbconfig.xml' }
   let(:service_script) { '/etc/init.d/jira' }
   let(:server_xml) { '/opt/atlassian-jira-current/conf/server.xml' }
-  let(:setenv_sh) { '/opt/atlassian-jira-current/bin/setenv.sh' }
+  let(:setenv2_sh) { '/opt/atlassian-jira-current/bin/setenv2.sh' }
   let(:user_sh) { '/opt/atlassian-jira-current/bin/user.sh' }
 
   describe 'by default' do
@@ -23,8 +23,10 @@ describe 'jira' do
     specify { should contain_file('/opt/atlassian-jira-current').with_target(application_dir) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
-    specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=384m/) }
-    specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
+    specify { should contain_file(setenv2_sh).with_content(/-Xms/) }
+    specify { should contain_file(setenv2_sh).with_content(/-Xmx/) }
+    specify { should contain_file(setenv2_sh).with_content(/-XX:MaxPermSize=/) }
+    specify { should contain_file(setenv2_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_file(user_sh).with_content(/^JIRA_USER="jira"/) }
     specify { should contain_file(cron_script).with_ensure('absent') }
     specify { should contain_file(dbconfig_xml) }
@@ -217,9 +219,9 @@ describe 'jira' do
   end
 
   describe 'with custom java opts' do
-    let(:params) { {:java_opts => '-Xms512m -Xmx1024m'} }
+    let(:params) { {:java_opts => '-Xms512m -Xmx1024m -XX:MaxPermSize=512m'} }
 
-    specify { should contain_file(setenv_sh).with_content(/-Xms512m -Xmx1024m/) }
+    specify { should contain_file(setenv2_sh).with_content(/-Xms512m -Xmx1024m -XX:MaxPermSize=512m/) }
   end
 
   describe 'should not accept empty java opts' do
@@ -228,12 +230,6 @@ describe 'jira' do
     specify do
       expect { should contain_class('jira') }.to raise_error(Puppet::Error, /java_opts/)
     end
-  end
-
-  describe 'with java_permgen => 256m' do
-    let(:params) { {:java_permgen => '256m'} }
-
-    specify { should contain_file(setenv_sh).with_content(/JIRA_MAX_PERM_SIZE=256m/) }
   end
 
   describe 'depends on custom java package' do
@@ -245,7 +241,7 @@ describe 'jira' do
   describe 'with plugin_startup_timeout => 600' do
     let(:params) { { :plugin_startup_timeout => 600} }
 
-    specify { should contain_file(setenv_sh).with_content(/-Datlassian.plugins.enable.wait=600/) }
+    specify { should contain_file(setenv2_sh).with_content(/-Datlassian.plugins.enable.wait=600/) }
   end
 
   describe 'should not accept empty db_url' do
