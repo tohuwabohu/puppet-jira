@@ -40,7 +40,7 @@ class jira (
   $protocols,
 
   $java_opts,
-  $java_package           = $jira::params::java_package,
+  $java_package,
   $plugin_startup_timeout = undef,
 
   $purge_backups_after    = undef
