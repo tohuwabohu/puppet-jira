@@ -19,7 +19,7 @@ describe 'jira' do
     specify { should contain_user('jira') }
     specify { should contain_group('jira') }
     specify { should contain_service('jira').with_ensure('running').with_enable(true) }
-    specify { should contain_service('jira').with_require('Package[sun-java6-jdk]') }
+    specify { should contain_service('jira').with_require('Package[openjdk-7-jdk]') }
     specify { should contain_file(application_dir) }
     specify { should contain_file('/opt/atlassian-jira-current').with_target(application_dir) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
