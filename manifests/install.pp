@@ -119,4 +119,10 @@ class jira::install inherits jira {
     mode    => '0755',
     require => File[$backup_dir],
   }
+
+  if $jira::java_package_ensure != undef {
+    package { $jira::java_package:
+      ensure => $jira::java_package_ensure,
+    }
+  }
 }

@@ -41,6 +41,7 @@ class jira (
 
   $java_opts,
   $java_package,
+  $java_package_ensure = undef,
   $plugin_startup_timeout = undef,
 
   $purge_backups_after    = undef
