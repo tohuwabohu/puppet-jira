@@ -12,7 +12,7 @@
 #
 class jira::service inherits jira {
 
-  $service_script = $jira::params::service_script
+  $service_script = $jira::service_script
   $service_ensure = $jira::service_disabled ? {
     true    => stopped,
     default => running,

@@ -1,0 +1,8 @@
+---
+jira::package_dir: /var/cache/puppet/archives
+jira::install_dir: /opt
+
+jira::data_dir: /var/lib/jira
+jira::run_dir: /var/run
+
+jira::service_script: /etc/init.d/jira

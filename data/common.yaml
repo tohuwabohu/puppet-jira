@@ -1,0 +1,19 @@
+---
+jira::version: '6.4'
+jira::md5sum: '1321c995b9cbddef79c146cdc42f95fb'
+jira::java_opts: '-Xms384m -Xmx768m -XX:MaxPermSize=384m'
+
+jira::db_url: jdbc:postgresql://localhost:5432/jira
+jira::db_type: postgres72
+jira::db_driver: org.postgresql.Driver
+jira::db_username: jira
+jira::db_password: secret
+
+jira::http_address: 127.0.0.1
+jira::http_port: 8080
+jira::ajp_address: 127.0.0.1
+jira::ajp_port: 8009
+jira::protocols: [http, ajp]
+
+jira::service_name: jira
+jira::service_disabled: false

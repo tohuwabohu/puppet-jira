@@ -11,37 +11,40 @@
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
 class jira (
-  $hostname               = $jira::params::hostname,
-  $version                = $jira::params::version,
+  $hostname              = $::fqdn,
+  $version,
 
-  $service_name           = $jira::params::service_name,
-  $service_uid            = $jira::params::service_uid,
-  $service_gid            = $jira::params::service_gid,
-  $service_disabled       = $jira::params::service_disabled,
+  $service_name,
+  $service_uid            = undef,
+  $service_gid            = undef,
+  $service_disabled,
+  $service_script,
 
-  $md5sum                 = $jira::params::md5sum,
-  $package_dir            = $jira::params::package_dir,
-  $install_dir            = $jira::params::install_dir,
-  $data_dir               = $jira::params::data_dir,
+  $md5sum,
+  $package_dir,
+  $install_dir,
 
-  $db_url                 = $jira::params::db_url,
-  $db_type                = $jira::params::db_type,
-  $db_driver              = $jira::params::db_driver,
-  $db_username            = $jira::params::db_username,
-  $db_password            = $jira::params::db_password,
+  $data_dir,
+  $run_dir,
 
-  $http_address           = $jira::params::http_address,
-  $http_port              = $jira::params::http_port,
-  $ajp_address            = $jira::params::ajp_address,
-  $ajp_port               = $jira::params::ajp_port,
-  $protocols              = $jira::params::protocols,
+  $db_url,
+  $db_type,
+  $db_driver,
+  $db_username,
+  $db_password,
 
-  $java_opts              = $jira::params::java_opts,
+  $http_address,
+  $http_port,
+  $ajp_address,
+  $ajp_port,
+  $protocols,
+
+  $java_opts,
   $java_package           = $jira::params::java_package,
-  $plugin_startup_timeout = $jira::params::plugin_startup_timeout,
+  $plugin_startup_timeout = undef,
 
-  $purge_backups_after    = $jira::params::purge_backups_after
-) inherits jira::params {
+  $purge_backups_after    = undef
+) {
 
   if empty($hostname) {
     fail('Class[Jira]: hostname must not be empty')

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'jira' do
   let(:title) { 'jira' }
+  let(:facts) { {:osfamily => 'Debian', :operatingsystemmajrelease => 7} }
   let(:archive_name) { 'atlassian-jira-6.4' }
   let(:application_dir) { "/opt/#{archive_name}-standalone" }
   let(:cron_script) { '/etc/cron.daily/purge-old-jira-backups' }

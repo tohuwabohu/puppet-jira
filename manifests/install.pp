@@ -24,7 +24,7 @@ class jira::install inherits jira {
   $backup_dir = "${data_dir}/export"
 
   $service_name = $jira::service_name
-  $pid_directory = "${jira::params::run_dir}/${service_name}"
+  $pid_directory = "${jira::run_dir}/${service_name}"
   $work_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",
@@ -96,7 +96,7 @@ class jira::install inherits jira {
     mode   => '0644',
   }
 
-  file { $jira::params::service_script:
+  file { $jira::service_script:
     ensure  => file,
     content => template('jira/jira.erb'),
     owner   => 'root',
