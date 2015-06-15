@@ -11,7 +11,7 @@
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
 class jira (
-  $hostname              = $::fqdn,
+  $hostname               = $::fqdn,
   $version,
 
   $service_name,
@@ -41,7 +41,7 @@ class jira (
 
   $java_opts,
   $java_package,
-  $java_package_ensure = undef,
+  $java_package_ensure    = undef,
   $plugin_startup_timeout = undef,
 
   $purge_backups_after    = undef
